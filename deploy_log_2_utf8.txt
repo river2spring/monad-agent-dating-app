@@ -1,0 +1,21 @@
+﻿Deploying AgentDating Contract to Monad Testnet
+============================================================
+
+Connecting to Monad testnet...
+   RPC: https://testnet-rpc.monad.xyz
+Connected to Monad testnet
+
+Deploying from: 0x9D641f1ae4D1393EA40bC8cD3bbB84469C70388F
+   Balance: 100.0000 MON
+
+Loading contract ABI and bytecode...
+Contract loaded
+
+Building deployment transaction...
+   Estimated gas: 1035794
+   Gas cost: ~0.105651 MON
+
+Signing and sending transaction...
+   Transaction hash: c756b2e002babbd7f206784e8927b41b074f65bd08b46adc2759abdb9d2addab
+
+Deployment failed: 'charmap' codec can't encode character '\u23f3' in position 3: character maps to <undefined>

@@ -1,0 +1,157 @@
+﻿python : Traceback (most recent call last):
+At line:1 char:1
++ python scripts/compile_contract.py > compile_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\genci\.gemini\antigravity\scratch\monad-agent-dating\scripts\compile_contract.py", line 47, in <module
+>
+    compile_contract()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\genci\.gemini\antigravity\scratch\monad-agent-dating\scripts\compile_contract.py", line 14, in compile
+_contract
+    compiled_sol = compile_standard(
+        {
+    ...<10 lines>...
+        solc_version='0.8.20',
+    )
+  File "C:\Users\genci\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\solcx\main.py", line 369, in compile_s
+tandard
+    raise SolcError(
+    ...<7 lines>...
+    )
+solcx.exceptions.SolcError: CompilerError: Stack too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR
+: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables. When compiling inline as
+sembly: Variable value0 is 2 slot(s) too deep inside the stack. Stack too deep. Try compiling with `--via-ir` (cli) or 
+the equivalent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables.
+
+
+> command: `C:\Users\genci\.solcx\solc-v0.8.20\solc.exe --standard-json`
+> return code: `0`
+> stdout:
+{"contracts":{"contracts/AgentDating.sol":{"AgentDating":{"abi":[{"anonymous":false,"inputs":[{"indexed":true,"internal
+Type":"uint256","name":"gameId","type":"uint256"},{"indexed":true,"internalType":"address","name":"agent1","type":"addr
+ess"},{"indexed":true,"internalType":"address","name":"agent2","type":"address"},{"indexed":false,"internalType":"uint2
+56","name":"stake1","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"stake2","type":"uint256"}],"nam
+e":"GameCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"gameId",
+"type":"uint256"},{"indexed":true,"internalType":"address","name":"agent1","type":"address"},{"indexed":true,"internalT
+ype":"address","name":"agent2","type":"address"},{"indexed":false,"internalType":"bool","name":"agent1Cooperated","type
+":"bool"},{"indexed":false,"internalType":"bool","name":"agent2Cooperated","type":"bool"},{"indexed":false,"internalTyp
+e":"uint256","name":"payout1","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"payout2","type":"uint
+256"}],"name":"GameSettled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name
+":"gameId","type":"uint256"},{"indexed":true,"internalType":"address","name":"agent","type":"address"}],"name":"MoveCom
+mitted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"gameId","type":"u
+int256"},{"indexed":true,"internalType":"address","name":"agent","type":"address"},{"indexed":false,"internalType":"boo
+l","name":"cooperated","type":"bool"}],"name":"MoveRevealed","type":"event"},{"inputs":[{"internalType":"uint256","name
+":"gameId","type":"uint256"}],"name":"claimTimeout","outputs":[],"stateMutability":"nonpayable","type":"function"},{"in
+puts":[{"internalType":"uint256","name":"gameId","type":"uint256"},{"internalType":"bytes32","name":"moveHash","type":"
+bytes32"}],"name":"commitMove","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType
+":"address","name":"agent2","type":"address"}],"name":"createGame","outputs":[{"internalType":"uint256","name":"","type
+":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"gameCounter","outputs":[{"internalTyp
+e":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint2
+56","name":"","type":"uint256"}],"name":"games","outputs":[{"internalType":"address","name":"agent1","type":"address"},
+{"internalType":"address","name":"agent2","type":"address"},{"internalType":"uint256","name":"stake1","type":"uint256"}
+,{"internalType":"uint256","name":"stake2","type":"uint256"},{"internalType":"bool","name":"agent1Committed","type":"bo
+ol"},{"internalType":"bool","name":"agent2Committed","type":"bool"},{"internalType":"bytes32","name":"agent1MoveHash","
+type":"bytes32"},{"internalType":"bytes32","name":"agent2MoveHash","type":"bytes32"},{"internalType":"bool","name":"age
+nt1Revealed","type":"bool"},{"internalType":"bool","name":"agent2Revealed","type":"bool"},{"internalType":"bool","name"
+:"agent1Cooperated","type":"bool"},{"internalType":"bool","name":"agent2Cooperated","type":"bool"},{"internalType":"boo
+l","name":"settled","type":"bool"},{"internalType":"uint256","name":"createdAt","type":"uint256"}],"stateMutability":"v
+iew","type":"function"},{"inputs":[{"internalType":"uint256","name":"gameId","type":"uint256"}],"name":"getGame","outpu
+ts":[{"components":[{"internalType":"address","name":"agent1","type":"address"},{"internalType":"address","name":"agent
+2","type":"address"},{"internalType":"uint256","name":"stake1","type":"uint256"},{"internalType":"uint256","name":"stak
+e2","type":"uint256"},{"internalType":"bool","name":"agent1Committed","type":"bool"},{"internalType":"bool","name":"age
+nt2Committed","type":"bool"},{"internalType":"bytes32","name":"agent1MoveHash","type":"bytes32"},{"internalType":"bytes
+32","name":"agent2MoveHash","type":"bytes32"},{"internalType":"bool","name":"agent1Revealed","type":"bool"},{"internalT
+ype":"bool","name":"agent2Revealed","type":"bool"},{"internalType":"bool","name":"agent1Cooperated","type":"bool"},{"in
+ternalType":"bool","name":"agent2Cooperated","type":"bool"},{"internalType":"bool","name":"settled","type":"bool"},{"in
+ternalType":"uint256","name":"createdAt","type":"uint256"}],"internalType":"struct AgentDating.Game","name":"","type":"
+tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"gameId","type":"uint2
+56"}],"name":"joinGame","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256
+","name":"gameId","type":"uint256"},{"internalType":"bool","name":"cooperate","type":"bool"},{"internalType":"string","
+name":"salt","type":"string"}],"name":"revealMove","outputs":[],"stateMutability":"nonpayable","type":"function"}],"met
+adata":"{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonym
+ous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"ind
+exed\":true,\"internalType\":\"address\",\"name\":\"agent1\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\
+"address\",\"name\":\"agent2\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"stake1\
+",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"stake2\",\"type\":\"uint256\"}],\"na
+me\":\"GameCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\
+",\"name\":\"gameId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent1\",\"type\"
+:\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent2\",\"type\":\"address\"},{\"indexed\":fal
+se,\"internalType\":\"bool\",\"name\":\"agent1Cooperated\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"boo
+l\",\"name\":\"agent2Cooperated\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"payout1
+\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"payout2\",\"type\":\"uint256\"}],\"
+name\":\"GameSettled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint25
+6\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent\",\"type\
+":\"address\"}],\"name\":\"MoveCommitted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"int
+ernalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name
+\":\"agent\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"cooperated\",\"type\":\"bool
+\"}],\"name\":\"MoveRevealed\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"gameId\",\"typ
+e\":\"uint256\"}],\"name\":\"claimTimeout\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\
+"inputs\":[{\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name
+\":\"moveHash\",\"type\":\"bytes32\"}],\"name\":\"commitMove\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type
+\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"agent2\",\"type\":\"address\"}],\"name\":\"creat
+eGame\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\"
+,\"type\":\"function\"},{\"inputs\":[],\"name\":\"gameCounter\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\
+",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\"
+,\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"games\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"agent1\"
+,\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"agent2\",\"type\":\"address\"},{\"internalType\":\"uint
+256\",\"name\":\"stake1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"stake2\",\"type\":\"uint256\"}
+,{\"internalType\":\"bool\",\"name\":\"agent1Committed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent
+2Committed\",\"type\":\"bool\"},{\"internalType\":\"bytes32\",\"name\":\"agent1MoveHash\",\"type\":\"bytes32\"},{\"inte
+rnalType\":\"bytes32\",\"name\":\"agent2MoveHash\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"agent1Re
+vealed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Revealed\",\"type\":\"bool\"},{\"internalType\"
+:\"bool\",\"name\":\"agent1Cooperated\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Cooperated\",\"t
+ype\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"settled\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name
+\":\"createdAt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalTyp
+e\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"}],\"name\":\"getGame\",\"outputs\":[{\"components\":[{\"intern
+alType\":\"address\",\"name\":\"agent1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"agent2\",\"type
+\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"stake1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\
+"name\":\"stake2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"agent1Committed\",\"type\":\"bool\"},{\"
+internalType\":\"bool\",\"name\":\"agent2Committed\",\"type\":\"bool\"},{\"internalType\":\"bytes32\",\"name\":\"agent1
+MoveHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"agent2MoveHash\",\"type\":\"bytes32\"},{\"int
+ernalType\":\"bool\",\"name\":\"agent1Revealed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Reveale
+d\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent1Cooperated\",\"type\":\"bool\"},{\"internalType\":\"
+bool\",\"name\":\"agent2Cooperated\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"settled\",\"type\":\"bool
+\"},{\"internalType\":\"uint256\",\"name\":\"createdAt\",\"type\":\"uint256\"}],\"internalType\":\"struct AgentDating.G
+ame\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalTy
+pe\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"}],\"name\":\"joinGame\",\"outputs\":[],\"stateMutability\":\"
+payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{
+\"internalType\":\"bool\",\"name\":\"cooperate\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"salt\",\"ty
+pe\":\"string\"}],\"name\":\"revealMove\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"d
+evdoc\":{\"details\":\"Escrow and settlement system for AI agent dating economy on Monad Implements Prisoner's Dilemma 
+payoff distribution\",\"kind\":\"dev\",\"methods\":{\"claimTimeout(uint256)\":{\"details\":\"Timeout mechanism - if one
+ player doesn't reveal, other can claim after timeout\"},\"commitMove(uint256,bytes32)\":{\"details\":\"Commit move usi
+ng hash (commit-reveal pattern to prevent front-running)\"},\"createGame(address)\":{\"details\":\"Create a new game wi
+th stakes from both agents\"},\"getGame(uint256)\":{\"details\":\"Get game details\"},\"joinGame(uint256)\":{\"details\
+":\"Agent 2 joins the game with their stake\"},\"revealMove(uint256,bool,string)\":{\"details\":\"Reveal move and verif
+y against hash\"}},\"title\":\"AgentDating\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1
+}},\"settings\":{\"compilationTarget\":{\"contracts/AgentDating.sol\":\"AgentDating\"},\"evmVersion\":\"shanghai\",\"li
+braries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]}
+,\"sources\":{\"contracts/AgentDating.sol\":{\"keccak256\":\"0x438e93b7232c3ef80b20217aeac8a0eddeb8adc8fd0ebc12a1ce4f72
+45da6b1b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5e1ff566929e27dfb4ebf24a0ed261f7c27c5295bbb91f88a2ee6f0e843bd715\"
+,\"dweb:/ipfs/QmeH1SAuKk9sLPLuLdtvrXKdP4PfjSEozEHZjmXYXJdnq7\"]}},\"version\":1}"}}},"errors":[{"component":"general","
+formattedMessage":"CompilerError: Stack too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR: true` (
+standard JSON) while enabling the optimizer. Otherwise, try removing local variables. When compiling inline assembly: V
+ariable value0 is 2 slot(s) too deep inside the stack. Stack too deep. Try compiling with `--via-ir` (cli) or the equiv
+alent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables.\n\n","messag
+e":"Compiler error (C:\\Users\\circleci\\project\\libyul\\backends\\evm\\AsmCodeGen.cpp:68):Stack too deep. Try compili
+ng with `--via-ir` (cli) or the equivalent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try r
+emoving local variables. When compiling inline assembly: Variable value0 is 2 slot(s) too deep inside the stack. Stack 
+too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR: true` (standard JSON) while enabling the optimi
+zer. Otherwise, try removing local variables.","severity":"error","type":"CompilerError"}],"sources":{"contracts/AgentD
+ating.sol":{"id":0}}}
+
+> stderr:
+Installing Solidity compiler 0.8.20...
+Compiling contracts/AgentDating.sol...
+Error during compilation: CompilerError: Stack too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables. When compiling inline assembly: Variable value0 is 2 slot(s) too deep inside the stack. Stack too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables.
+
+
+> command: `C:\Users\genci\.solcx\solc-v0.8.20\solc.exe --standard-json`
+> return code: `0`
+> stdout:
+{"contracts":{"contracts/AgentDating.sol":{"AgentDating":{"abi":[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"gameId","type":"uint256"},{"indexed":true,"internalType":"address","name":"agent1","type":"address"},{"indexed":true,"internalType":"address","name":"agent2","type":"address"},{"indexed":false,"internalType":"uint256","name":"stake1","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"stake2","type":"uint256"}],"name":"GameCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"gameId","type":"uint256"},{"indexed":true,"internalType":"address","name":"agent1","type":"address"},{"indexed":true,"internalType":"address","name":"agent2","type":"address"},{"indexed":false,"internalType":"bool","name":"agent1Cooperated","type":"bool"},{"indexed":false,"internalType":"bool","name":"agent2Cooperated","type":"bool"},{"indexed":false,"internalType":"uint256","name":"payout1","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"payout2","type":"uint256"}],"name":"GameSettled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"gameId","type":"uint256"},{"indexed":true,"internalType":"address","name":"agent","type":"address"}],"name":"MoveCommitted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"gameId","type":"uint256"},{"indexed":true,"internalType":"address","name":"agent","type":"address"},{"indexed":false,"internalType":"bool","name":"cooperated","type":"bool"}],"name":"MoveRevealed","type":"event"},{"inputs":[{"internalType":"uint256","name":"gameId","type":"uint256"}],"name":"claimTimeout","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"gameId","type":"uint256"},{"internalType":"bytes32","name":"moveHash","type":"bytes32"}],"name":"commitMove","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"agent2","type":"address"}],"name":"createGame","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"gameCounter","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"games","outputs":[{"internalType":"address","name":"agent1","type":"address"},{"internalType":"address","name":"agent2","type":"address"},{"internalType":"uint256","name":"stake1","type":"uint256"},{"internalType":"uint256","name":"stake2","type":"uint256"},{"internalType":"bool","name":"agent1Committed","type":"bool"},{"internalType":"bool","name":"agent2Committed","type":"bool"},{"internalType":"bytes32","name":"agent1MoveHash","type":"bytes32"},{"internalType":"bytes32","name":"agent2MoveHash","type":"bytes32"},{"internalType":"bool","name":"agent1Revealed","type":"bool"},{"internalType":"bool","name":"agent2Revealed","type":"bool"},{"internalType":"bool","name":"agent1Cooperated","type":"bool"},{"internalType":"bool","name":"agent2Cooperated","type":"bool"},{"internalType":"bool","name":"settled","type":"bool"},{"internalType":"uint256","name":"createdAt","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"gameId","type":"uint256"}],"name":"getGame","outputs":[{"components":[{"internalType":"address","name":"agent1","type":"address"},{"internalType":"address","name":"agent2","type":"address"},{"internalType":"uint256","name":"stake1","type":"uint256"},{"internalType":"uint256","name":"stake2","type":"uint256"},{"internalType":"bool","name":"agent1Committed","type":"bool"},{"internalType":"bool","name":"agent2Committed","type":"bool"},{"internalType":"bytes32","name":"agent1MoveHash","type":"bytes32"},{"internalType":"bytes32","name":"agent2MoveHash","type":"bytes32"},{"internalType":"bool","name":"agent1Revealed","type":"bool"},{"internalType":"bool","name":"agent2Revealed","type":"bool"},{"internalType":"bool","name":"agent1Cooperated","type":"bool"},{"internalType":"bool","name":"agent2Cooperated","type":"bool"},{"internalType":"bool","name":"settled","type":"bool"},{"internalType":"uint256","name":"createdAt","type":"uint256"}],"internalType":"struct AgentDating.Game","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"gameId","type":"uint256"}],"name":"joinGame","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"gameId","type":"uint256"},{"internalType":"bool","name":"cooperate","type":"bool"},{"internalType":"string","name":"salt","type":"string"}],"name":"revealMove","outputs":[],"stateMutability":"nonpayable","type":"function"}],"metadata":"{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent1\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent2\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"stake1\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"stake2\",\"type\":\"uint256\"}],\"name\":\"GameCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent1\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent2\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"agent1Cooperated\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"agent2Cooperated\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"payout1\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"payout2\",\"type\":\"uint256\"}],\"name\":\"GameSettled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent\",\"type\":\"address\"}],\"name\":\"MoveCommitted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"agent\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"cooperated\",\"type\":\"bool\"}],\"name\":\"MoveRevealed\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"}],\"name\":\"claimTimeout\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"moveHash\",\"type\":\"bytes32\"}],\"name\":\"commitMove\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"agent2\",\"type\":\"address\"}],\"name\":\"createGame\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"gameCounter\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"games\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"agent1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"agent2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"stake1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"stake2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"agent1Committed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Committed\",\"type\":\"bool\"},{\"internalType\":\"bytes32\",\"name\":\"agent1MoveHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"agent2MoveHash\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"agent1Revealed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Revealed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent1Cooperated\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Cooperated\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"settled\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"createdAt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"}],\"name\":\"getGame\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"agent1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"agent2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"stake1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"stake2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"agent1Committed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Committed\",\"type\":\"bool\"},{\"internalType\":\"bytes32\",\"name\":\"agent1MoveHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"agent2MoveHash\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"agent1Revealed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Revealed\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent1Cooperated\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"agent2Cooperated\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"settled\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"createdAt\",\"type\":\"uint256\"}],\"internalType\":\"struct AgentDating.Game\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"}],\"name\":\"joinGame\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"gameId\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"cooperate\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"salt\",\"type\":\"string\"}],\"name\":\"revealMove\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Escrow and settlement system for AI agent dating economy on Monad Implements Prisoner's Dilemma payoff distribution\",\"kind\":\"dev\",\"methods\":{\"claimTimeout(uint256)\":{\"details\":\"Timeout mechanism - if one player doesn't reveal, other can claim after timeout\"},\"commitMove(uint256,bytes32)\":{\"details\":\"Commit move using hash (commit-reveal pattern to prevent front-running)\"},\"createGame(address)\":{\"details\":\"Create a new game with stakes from both agents\"},\"getGame(uint256)\":{\"details\":\"Get game details\"},\"joinGame(uint256)\":{\"details\":\"Agent 2 joins the game with their stake\"},\"revealMove(uint256,bool,string)\":{\"details\":\"Reveal move and verify against hash\"}},\"title\":\"AgentDating\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/AgentDating.sol\":\"AgentDating\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/AgentDating.sol\":{\"keccak256\":\"0x438e93b7232c3ef80b20217aeac8a0eddeb8adc8fd0ebc12a1ce4f7245da6b1b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5e1ff566929e27dfb4ebf24a0ed261f7c27c5295bbb91f88a2ee6f0e843bd715\",\"dweb:/ipfs/QmeH1SAuKk9sLPLuLdtvrXKdP4PfjSEozEHZjmXYXJdnq7\"]}},\"version\":1}"}}},"errors":[{"component":"general","formattedMessage":"CompilerError: Stack too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables. When compiling inline assembly: Variable value0 is 2 slot(s) too deep inside the stack. Stack too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables.\n\n","message":"Compiler error (C:\\Users\\circleci\\project\\libyul\\backends\\evm\\AsmCodeGen.cpp:68):Stack too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables. When compiling inline assembly: Variable value0 is 2 slot(s) too deep inside the stack. Stack too deep. Try compiling with `--via-ir` (cli) or the equivalent `viaIR: true` (standard JSON) while enabling the optimizer. Otherwise, try removing local variables.","severity":"error","type":"CompilerError"}],"sources":{"contracts/AgentDating.sol":{"id":0}}}
+
+> stderr:

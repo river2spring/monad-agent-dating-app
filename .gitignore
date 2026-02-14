@@ -1,0 +1,12 @@
+# Add to .gitignore
+__pycache__/
+*.pyc
+*.pyo
+.env
+node_modules/
+artifacts/
+cache/
+.pytest_cache/
+*.log
+.DS_Store
+package-lock.json

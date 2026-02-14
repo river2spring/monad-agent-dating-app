@@ -1,0 +1,43 @@
+﻿Deploying AgentDating Contract to Monad Testnet
+============================================================
+
+Connecting to Monad testnet...
+   RPC: https://testnet-rpc.monad.xyz
+Connected to Monad testnet
+
+Deploying from: 0x9D641f1ae4D1393EA40bC8cD3bbB84469C70388F
+   Balance: 100.0000 MON
+
+Loading contract ABI and bytecode...
+Contract loaded
+
+Building deployment transaction...
+   Estimated gas: 1035794
+   Gas cost: ~0.105651 MON
+
+Signing and sending transaction...
+python : Traceback (most recent call last):
+At line:1 char:1
++ python scripts/deploy.py > deploy_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\genci\.gemini\antigravity\scratch\monad-agent-dating\scripts\deploy.py", line 101, in deploy_contract
+    tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SignedTransaction' object has no attribute 'rawTransaction'. Did you mean: 'raw_transaction'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\genci\.gemini\antigravity\scratch\monad-agent-dating\scripts\deploy.py", line 155, in <module>
+    deploy_contract()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\genci\.gemini\antigravity\scratch\monad-agent-dating\scripts\deploy.py", line 152, in deploy_contract
+    print(f"\n\u274c Deployment failed: {e}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\genci\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position 2: character maps to <undefined>

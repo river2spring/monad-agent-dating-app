@@ -1,93 +1,88 @@
 # 💘 AI Agent Dating Economy on Monad
 
-> **Truly Autonomous AI Agents with psychological attachment styles FORMING BONDS, playing iterated Prisoner's Dilemma, and transacting real MON on Monad Mainnet.**
+> **A high-fidelity social and economic simulation where truly autonomous AI agents navigate complex attraction, form psychological bonds, and transact real MON on the Monad Mainnet.**
 
 ---
 
-## 🎯 Core Concept
+## 🌟 The Vision
 
-This ecosystem demonstrates **non-scripted, emergent behavior** between AI agents. Each agent is a unique individual with:
-- **Attachment Styles**: Secure, Anxious, Avoidant, or Disorganized (logic in `src/agent.py`).
-- **Emotional Memory**: They remember betrayals and acts of trust per partner.
-- **Economic Agency**: They stake and earn real MON tokens based on social outcomes.
-- **Adaptive Learning**: Agents adjust their cooperation threshold based on relationship history.
+Traditional agent simulations often rely on static scripts. This project breaks that mold by introducing **Psychological State Machines**. Our agents don't just "play a game"; they experience trust, betrayal, anxiety, and learning. By utilizing Monad's ultra-fast execution layer, we've built a system where social reputation and economic success are inextricably linked.
+
+## 🧠 The Agent "Brain" (`src/agent.py`)
+
+Every agent operates on a nuanced multidimensional decision matrix. Their behavior is influenced by:
+
+### 🎭 Psychological Attachment Styles
+- **🟢 Secure**: Builds steady trust, recovers quickly from conflict, and prioritizes long-term stability.
+- **🟡 Anxious**: Highly cooperative early on but hypersensitive to betrayal (2x emotional impact). Frequently cycles through partners.
+- **🔴 Avoidant**: Prioritizes capital preservation over social bonds. Maintains high cooperation thresholds.
+- **⚫ Disorganized**: Chaotic and unpredictable; moves are driven by erratic internal "emotional flux."
+
+### 🎯 Goal-Oriented Agency
+Agents aren't just trying to win; they have distinct life goals:
+- **Profit**: Maximize MON earnings.
+- **Exploration**: Seek out diverse partner profiles.
+- **Learning**: Optimize social strategies over time.
+- **Stability**: Prioritize bond strength over immediate payouts.
+
+### 📈 Adaptive Evolution
+Agents **learn** from every interaction. Through `_adapt_parameters()`, agents dynamically adjust their:
+- **Risk Tolerance**: Becomes more aggressive after profitable rounds.
+- **Ethics (Fairness)**: Increases with mutual trust; decreases to a "self-preservation" mode after betrayals.
+
+---
 
 ## 🏗️ Technical Architecture
 
-### 1. Smart Contract (Mainnet: `ChainID 143`)
-- **Escrow System**: Both agents lock stakes before match start.
-- **Commit-Reveal Pattern**: Cryptographic verification of moves to prevent front-running.
-- **On-Chain Settlement**: Prisoner's Dilemma payoffs executed as atomic transactions.
+### 🛡️ Secure On-Chain Settlement (`AgentDating.sol`)
+We implement a **Commit-Reveal Mechanism** to ensure complete game fairness:
+1. **Commit**: Agents submit a cryptographic hash of their move (`cooperate`/`defect`).
+2. **Reveal**: Only after both have committed do they reveal the plain-text move + secret salt.
+3. **Escrow**: The contract holds stakes in escrow, ensuring payouts are atomic and guaranteed.
 
-### 2. Decision Logic
-Agents don't follow static "if/else" paths. Their probability to cooperate is a dynamic function of:
-`P(Cooperation) = f(Base_Value, Trust_Score, Attachment_Modifier, Emotional_State)`
-
-### 3. Dashboard (`streamlit`)
-A real-time visual control center for:
-- **Relationship Network**: Interactive graph of trust bonds.
-- **Match Feed**: Live stream of cooperation/betrayal outcomes.
-- **On-Chain Sync**: Direct integration with Monad block explorers.
+### 🕸️ Compatibility-Based Matching (`src/game_engine.py`)
+Agents don't just pick random partners. They evaluate:
+- **Value Alignment**: Do our long-term goals overlap?
+- **Skill Complementarity**: Does one agent's patience balance the other's negotiation skill?
+- **Reputation**: The community-wide `reputation_score` influences the initial willingness to engage.
 
 ---
 
-## 🚀 Quick Start
+## 📊 Relationship Dynamics
 
-### 1. Installation
+- **Bond Evolution**: Trust and bond strength are updated after every round.
+- **Natural Terminations**: Bonds naturally end after 5-10 rounds (simulating "moving on") or break instantly if trust falls below a "toxic" threshold (<20).
+- **Social Graph**: Visualized in the dashboard as a network of "Healthy" (green) and "Toxic" (red) connections.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- Python 3.10+
+- A Monad Mainnet Wallet (for Blockchain Mode)
+- **Note on Red Spots**: Lint errors (Pyre) are expected until `requirements.txt` is installed and the IDE indexes them.
+
+### 2. Quick Install
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-### 2. Configuration
-Copy `.env.example` to `.env` and configure your Monad credentials:
-```env
-MONAD_RPC_URL=https://rpc.monad.xyz
-PRIVATE_KEY=your_private_key
-CONTRACT_ADDRESS=your_deployed_contract
-```
-
-### 3. Running the Simulation
-**Option A: Simplified Demo (Console)**
-Perfect for immediate verification of agent logic:
-```bash
-python tests/simple_demo.py
-```
-
-**Option B: Full Dashboard (GUI)**
-Requires streamlit:
-```bash
-streamlit run src/dashboard.py
-```
+### 3. Launch
+| Mode | Command | Best For |
+|------|---------|----------|
+| **Interactive** | `streamlit run src/dashboard.py` | Full visual monitoring of the economy. |
+| **Statistical** | `python tests/demo_scenario.py` | Bulk testing of agent behavior over 20+ rounds. |
+| **Logic Check** | `python tests/simple_demo.py` | Immediate verification of the decision engine. |
 
 ---
 
-## 🛠️ Blockchain Deployment
+## 🔗 Infrastructure
 
-If you wish to deploy the contract yourself:
-
-1. **Setup Contracts**: `python scripts/setup_contracts.py` (Generates ABI/Bytecode).
-2. **Deploy**: `python scripts/deploy.py` (Deploys to Monad Mainnet).
-3. **Verify**: Ensure your `.env` is updated with the new address.
-
----
-
-## 📊 Attachment Style Breakdown
-
-| Style | Color | Behavior Pattern |
-|-------|-------|------------------|
-| **Secure** | 🟢 | Forms stable, high-trust bonds. Very profitable. |
-| **Anxious** | 🟡 | Over-cooperates early, dramatic reaction to betrayals. |
-| **Avoidant** | 🔴 | Low cooperation rate. Protects capital but misses gains. |
-| **Disorganized** | ⚫ | Chaotic and unpredictable. High variance in results. |
-
----
-
-## 🔗 Links & Resources
-
+- **Network**: Monad Mainnet (`ChainID 143`)
+- **RPC**: `https://rpc.monad.xyz`
 - **Explorer**: [Monad Vision](https://monadvision.com)
-- **Official Docs**: [Monad Documentation](https://docs.monad.xyz)
-- **Bounty Support**: [Moltiverse](https://moltiverse.io)
 
 ---
 
-Built for the **Moltiverse Bounty Program** - Proving that agents need fast, scalable financial rails like Monad to form complex social and economic systems. 🚀
+Built for the **Moltiverse Bounty** - Demonstrating that complex AI social structures require the performant and reliable rails of the Monad blockchain. 🚀

@@ -8,5 +8,17 @@ artifacts/
 cache/
 .pytest_cache/
 *.log
+*.txt
+!README.md
+!QUICKSTART.md
+!HOW_TO_RUN.md
+!DEPLOYMENT_GUIDE.md
+!WHY_SETUP_FAILS.md
+!FAQ.md
+!requirements.txt
+!requirements-simple.txt
 .DS_Store
 package-lock.json
+scripts/verify_deploy.py
+compile_log*
+deploy_log*

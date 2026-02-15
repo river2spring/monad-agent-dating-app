@@ -2,14 +2,18 @@
 Game engine that orchestrates iterated Prisoner's Dilemma games between agents
 """
 import random
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Any, TYPE_CHECKING
 from agent import Agent, Goal, AttachmentStyle
+
+if TYPE_CHECKING:
+    from blockchain import BlockchainIntegration
 
 class GameEngine:
     """Orchestrates autonomous agent interactions"""
     
-    def __init__(self, agents: List[Agent]):
+    def __init__(self, agents: List[Agent], blockchain: Optional['BlockchainIntegration'] = None):
         self.agents = agents
+        self.blockchain = blockchain
         self.active_bonds: Dict[Tuple[str, str], int] = {}  # (agent1, agent2) -> rounds_played
         self.match_history: List[Dict] = []
         
@@ -43,15 +47,28 @@ class GameEngine:
         
         return matches
     
-    def run_round(self, agent1: Agent, agent2: Agent) -> Dict:
+    def run_round(self, agent1: Agent, agent2: Agent) -> Optional[Dict]:
         """Run a single game round between two agents"""
         # Agents decide stakes
-        stake1 = agent1.calculate_stake(agent2)
-        stake2 = agent2.calculate_stake(agent1)
+        stake1 = float(agent1.calculate_stake(agent2))
+        stake2 = float(agent2.calculate_stake(agent1))
         
-        # Ensure agents have enough balance
-        stake1 = min(stake1, agent1.balance)
-        stake2 = min(stake2, agent2.balance)
+        # Gas Reservation & Small Stakes logic for Blockchain Mode
+        if self.blockchain and self.blockchain.contract:
+            GAS_BUFFER = 0.02
+            MAX_ON_CHAIN_STAKE = 0.005
+            
+            # Reserve gas buffer
+            available1 = float(max(0.0, agent1.balance - GAS_BUFFER))
+            available2 = float(max(0.0, agent2.balance - GAS_BUFFER))
+            
+            # Cap stake and ensure it doesn't exceed available balance after gas buffer
+            stake1 = float(min(stake1, available1, MAX_ON_CHAIN_STAKE))
+            stake2 = float(min(stake2, available2, MAX_ON_CHAIN_STAKE))
+        else:
+            # Standard balance checks for off-chain or initial logic
+            stake1 = float(min(stake1, float(agent1.balance)))
+            stake2 = float(min(stake2, float(agent2.balance)))
         
         if stake1 <= 0 or stake2 <= 0:
             return None  # Can't play
@@ -60,8 +77,71 @@ class GameEngine:
         move1 = agent1.decide_move(agent2, stake1)
         move2 = agent2.decide_move(agent1, stake2)
         
-        # Calculate payoffs based on Prisoner's Dilemma
-        payout1, payout2 = self._calculate_payoffs(move1, move2, stake1, stake2)
+        tx_details: Dict[str, Any] = {}
+        
+        # On-chain execution if blockchain mode is active
+        if self.blockchain and self.blockchain.contract:
+            try:
+                # 1. Create Game (Agent 1)
+                print(f"⛓️ Broadcasting create_game (Agent 1: {agent1.profile.name})...")
+                stake_wei = self.blockchain.w3.to_wei(stake1, 'ether')
+                game_id, tx_create = self.blockchain.create_game(agent1.profile.private_key, agent2.profile.address, stake_wei)
+                
+                # Record the hash immediately so it's visible even on failure
+                tx_details['tx_hashes'] = {'create': tx_create}
+                
+                # CRITICAL: Validate Game ID before proceeding
+                if game_id is None:
+                    raise Exception("Game creation failed on-chain (Transaction might have reverted or no Game ID in logs)")
+                
+                print(f"✅ Game Created: ID #{game_id}")
+                tx_details['game_id'] = game_id
+                
+                # 2. Join Game (Agent 2)
+                print(f"⛓️ Broadcasting join_game (Agent 2: {agent2.profile.name})...")
+                stake2_wei = self.blockchain.w3.to_wei(stake2, 'ether')
+                tx_join = self.blockchain.join_game(game_id, agent2.profile.private_key, stake2_wei)
+                tx_details['tx_hashes']['join'] = tx_join
+                print("✅ Join Confirmed")
+                
+                # 3. Commit Moves (Both)
+                print(f"⛓️ Broadcasting commit_move (Agent 1: {agent1.profile.name})...")
+                tx_commit1, salt1 = self.blockchain.commit_move(game_id, agent1.profile.private_key, move1)
+                print(f"⛓️ Broadcasting commit_move (Agent 2: {agent2.profile.name})...")
+                tx_commit2, salt2 = self.blockchain.commit_move(game_id, agent2.profile.private_key, move2)
+                tx_details['tx_hashes']['commit1'] = tx_commit1
+                tx_details['tx_hashes']['commit2'] = tx_commit2
+                print("✅ Commits Confirmed")
+                
+                # 4. Reveal Moves (Both)
+                print(f"⛓️ Broadcasting reveal_move (Agent 1: {agent1.profile.name})...")
+                tx_reveal1 = self.blockchain.reveal_move(game_id, agent1.profile.private_key, move1, salt1)
+                print(f"⛓️ Broadcasting reveal_move (Agent 2: {agent2.profile.name})...")
+                tx_reveal2 = self.blockchain.reveal_move(game_id, agent2.profile.private_key, move2, salt2)
+                tx_details['tx_hashes']['reveal1'] = tx_reveal1
+                tx_details['tx_hashes']['reveal2'] = tx_reveal2
+                print("✅ Reveals Confirmed")
+                
+                # 5. Get Final Results from Contract
+                game_result = self.blockchain.get_game(game_id)
+                tx_details['on_chain'] = True
+                
+                # Payouts
+                payout1, payout2 = self._calculate_payoffs(move1, move2, stake1, stake2)
+                
+            except Exception as e:
+                print(f"Blockchain transaction failed: {e}")
+                tx_details['error'] = str(e)
+                # Fallback or record failure
+                # If game_id was None, we didn't actually start an on-chain game
+                payout1, payout2 = 0, 0 # No payout if it failed to start
+                if 'game_id' not in tx_details:
+                    # Off-chain fallback if user wants to keep sim moving, 
+                    # but for this request we want robustness, so we record the failure
+                    pass
+        else:
+            # Calculate payoffs based on Prisoner's Dilemma
+            payout1, payout2 = self._calculate_payoffs(move1, move2, stake1, stake2)
         
         # Update agents
         agent1.update_after_game(agent2, move1, move2, stake1, payout1)
@@ -76,13 +156,16 @@ class GameEngine:
             'agent2_name': agent2.profile.name,
             'agent1_move': 'cooperate' if move1 else 'defect',
             'agent2_move': 'cooperate' if move2 else 'defect',
+            'agent1_reason': agent1.last_decision_reason,
+            'agent2_reason': agent2.last_decision_reason,
             'agent1_stake': stake1,
             'agent2_stake': stake2,
             'agent1_payout': payout1,
             'agent2_payout': payout2,
             'agent1_profit': payout1 - stake1,
             'agent2_profit': payout2 - stake2,
-            'bond_rounds': self.active_bonds[bond_key]
+            'bond_rounds': self.active_bonds[bond_key],
+            **tx_details
         }
         
         self.match_history.append(result)

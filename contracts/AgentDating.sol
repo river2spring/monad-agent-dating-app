@@ -69,6 +69,7 @@ contract AgentDating {
             createdAt: block.timestamp
         });
         
+        emit GameCreated(gameId, msg.sender, agent2, msg.value, 0);
         return gameId;
     }
     

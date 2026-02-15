@@ -1,5 +1,5 @@
 """
-Deploy AgentDating contract to Monad testnet
+Deploy AgentDating contract to Monad Mainnet
 """
 import sys
 import os
@@ -10,10 +10,10 @@ from dotenv import load_dotenv
 import json
 
 def deploy_contract():
-    """Deploy the contract to Monad testnet"""
+    """Deploy the contract to Monad Mainnet"""
     load_dotenv()
     
-    print("Deploying AgentDating Contract to Monad Testnet")
+    print("Deploying AgentDating Contract to Monad Mainnet")
     print("=" * 60)
     
     # Load configuration
@@ -26,17 +26,17 @@ def deploy_contract():
         return
     
     # Connect to Monad
-    print("\nConnecting to Monad testnet...")
+    print("\nConnecting to Monad Mainnet...")
     print(f"   RPC: {rpc_url}")
     
     w3 = Web3(Web3.HTTPProvider(rpc_url))
     
     if not w3.is_connected():
-        print("Failed to connect to Monad testnet")
+        print("Failed to connect to Monad Mainnet")
         print("   Please check your RPC URL")
         return
     
-    print("Connected to Monad testnet")
+    print("Connected to Monad Mainnet")
     
     # Load account
     account = w3.eth.account.from_key(private_key)
@@ -49,7 +49,7 @@ def deploy_contract():
     
     if balance == 0:
         print("\nInsufficient balance!")
-        print("   Please get testnet MON from faucet")
+        print("   Please get MON from an exchange or bridge")
         return
     
     # Load contract
@@ -101,7 +101,7 @@ def deploy_contract():
         tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
         
         print(f"   Transaction hash: {tx_hash.hex()}")
-        print("   ⏳ Waiting for confirmation...")
+        print("   Waiting for confirmation...")
         
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
         

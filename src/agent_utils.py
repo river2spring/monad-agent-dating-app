@@ -29,6 +29,10 @@ def create_agent_population(num_agents: int = 10, initial_balance: float = 10.0)
         num_goals = random.randint(1, 3)
         goals = random.sample(list(Goal), num_goals)
         
+        # Generate a unique wallet for each agent
+        from eth_account import Account
+        acct = Account.create()
+        
         # Create profile with varied attributes
         profile = AgentProfile(
             name=names[i],
@@ -42,6 +46,8 @@ def create_agent_population(num_agents: int = 10, initial_balance: float = 10.0)
             skill_adaptability=random.uniform(0.3, 0.9),
             preferred_partner_goals=random.sample(list(Goal), random.randint(1, 2)),
             preferred_trust_threshold=random.uniform(30, 70),
+            address=acct.address,
+            private_key=acct.key.hex(),
             reputation_score=random.uniform(40, 60)
         )
         
@@ -57,6 +63,7 @@ def get_agent_summary(agent: Agent) -> dict:
         'goals': [g.value for g in agent.profile.goals],
         'balance': round(agent.balance, 2),
         'reputation': round(agent.profile.reputation_score, 1),
+        'address': agent.profile.address,
         'emotional_state': round(agent.emotional_state, 1),
         'risk_tolerance': round(agent.profile.risk_tolerance, 2),
         'ethics_fairness': round(agent.profile.ethics_fairness, 2),

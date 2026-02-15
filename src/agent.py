@@ -32,6 +32,8 @@ class AgentProfile:
     skill_adaptability: float  # 0.0-1.0
     preferred_partner_goals: List[Goal]
     preferred_trust_threshold: float  # Minimum trust to form bond
+    address: Optional[str] = None
+    private_key: Optional[str] = None
     reputation_score: float = 50.0  # Community reputation
     
 @dataclass
@@ -57,6 +59,7 @@ class Agent:
         self.relationships: Dict[str, RelationshipMemory] = {}
         self.game_history: List[Dict] = []
         self.emotional_state: float = 50.0  # 0-100, affects decision-making
+        self.last_decision_reason: str = "Initial state"
         
     def select_partner(self, available_agents: List['Agent']) -> Optional['Agent']:
         """Autonomously select a partner based on compatibility and goals"""
@@ -143,58 +146,88 @@ class Agent:
             )
         
         memory = self.relationships[partner.profile.name]
+        reasons = []
         
         # Base probability of cooperation
         coop_prob = 0.5
+        reasons.append("Base curiosity")
         
         # Trust influence (0-100 -> 0-40%)
-        coop_prob += (memory.trust_score / 100) * 0.4
+        trust_effect = (memory.trust_score / 100) * 0.4
+        coop_prob += trust_effect
+        if trust_effect > 0.2:
+            reasons.append(f"Strong trust in {partner.profile.name}")
+        elif trust_effect < 0.1:
+            reasons.append(f"Wary of {partner.profile.name}")
         
         # Ethics influence
         coop_prob += self.profile.ethics_fairness * 0.2
+        if self.profile.ethics_fairness > 0.7:
+            reasons.append("Valuing fairness")
         
         # Attachment style modifiers
         if self.profile.attachment_style == AttachmentStyle.SECURE:
-            coop_prob += 0.2  # Generally cooperative
+            coop_prob += 0.2
+            reasons.append("Securely building connection")
         elif self.profile.attachment_style == AttachmentStyle.ANXIOUS:
-            # Over-cooperates, especially early in relationship
             if memory.total_games < 3:
                 coop_prob += 0.3
-            # But reacts strongly to betrayal
+                reasons.append("Eager to please (Anxious)")
             if memory.times_betrayed > 0:
-                coop_prob -= memory.times_betrayed * 0.15
+                betrayal_penalty = memory.times_betrayed * 0.15
+                coop_prob -= betrayal_penalty
+                reasons.append("Hurting from past betrayal")
         elif self.profile.attachment_style == AttachmentStyle.AVOIDANT:
-            coop_prob -= 0.3  # Generally defects
+            coop_prob -= 0.3
+            reasons.append("Keeping emotional distance")
         else:  # DISORGANIZED
-            # Chaotic, add randomness
-            coop_prob += random.uniform(-0.3, 0.3)
+            rand_mod = random.uniform(-0.3, 0.3)
+            coop_prob += rand_mod
+            reasons.append("Unpredictable emotional flux")
         
         # Goal-based modifiers
         if Goal.PROFIT in self.profile.goals:
-            coop_prob -= 0.1  # More likely to defect for profit
+            coop_prob -= 0.1
+            reasons.append("Prioritizing MON earnings")
         if Goal.STABILITY in self.profile.goals:
-            coop_prob += 0.15  # More cooperative for long-term bonds
+            coop_prob += 0.15
+            reasons.append("Seeking long-term stability")
         
         # Emotional state influence
-        coop_prob += (self.emotional_state - 50) / 100 * 0.2
+        emotion_mod = (self.emotional_state - 50) / 100 * 0.2
+        coop_prob += emotion_mod
+        if emotion_mod > 0.05:
+            reasons.append("Feeling optimistic")
+        elif emotion_mod < -0.05:
+            reasons.append("Feeling frustrated")
         
         # Risk tolerance
         if stake > self.balance * self.profile.risk_tolerance:
-            coop_prob -= 0.15  # Less likely to risk large amounts
+            coop_prob -= 0.15
+            reasons.append("Risk is too high for my comfort")
         
         # Tit-for-tat strategy (reciprocity)
         if memory.total_games > 0 and self.profile.ethics_reciprocity > 0.5:
-            # Copy partner's last move
             if memory.last_interaction_outcome == "cooperated":
                 coop_prob += 0.25
+                reasons.append("Reciprocating previous kindness")
             elif memory.last_interaction_outcome == "defected":
                 coop_prob -= 0.25
+                reasons.append("Retaliating against defection")
         
         # Ensure bounds
         coop_prob = max(0, min(1, coop_prob))
         
         # Make decision
-        return random.random() < coop_prob
+        move = random.random() < coop_prob
+        
+        # Set final reason - pick the most relevant one or combine
+        if not move and any("betrayal" in r.lower() or "retaliating" in r.lower() for r in reasons):
+            self.last_decision_reason = next(r for r in reasons if "betrayal" in r.lower() or "retaliating" in r.lower())
+        else:
+            self.last_decision_reason = reasons[-1] if reasons else "Following gut instinct"
+            
+        return move
     
     def _initial_trust(self) -> float:
         """Get initial trust based on attachment style"""
@@ -235,6 +268,10 @@ class Agent:
         memory.total_games += 1
         memory.total_earnings += (payout - my_stake)
         
+        # Update internal balance
+        self.balance -= my_stake
+        self.balance += payout
+        
         # Update cooperation/defection counts
         if partner_move:
             memory.times_cooperated += 1
@@ -258,15 +295,15 @@ class Agent:
         # Update emotional state
         self._update_emotion(my_move, partner_move, payout, my_stake)
         
-        # Update balance
-        self.balance += (payout - my_stake)
-        
         # Update reputation
         if my_move:
             self.profile.reputation_score += 0.5  # Cooperation increases reputation
         else:
             self.profile.reputation_score -= 0.3  # Defection decreases reputation
         self.profile.reputation_score = max(0, min(100, self.profile.reputation_score))
+        
+        # Adapt parameters based on learning
+        self._adapt_parameters(my_move, partner_move, payout, my_stake)
         
         # Record in history
         self.game_history.append({
@@ -329,6 +366,29 @@ class Agent:
                 self.emotional_state -= 10.0
         
         self.emotional_state = max(0, min(100, self.emotional_state))
+
+    def _adapt_parameters(self, my_move: bool, partner_move: bool, payout: float, stake: float):
+        """Adapt agent parameters based on success/failure to simulate learning"""
+        profit = payout - stake
+        learning_rate = 0.01 * self.profile.skill_adaptability
+        
+        # If strategy is profitable, reinforce risk tolerance
+        if profit > 0:
+            self.profile.risk_tolerance += learning_rate
+        else:
+            self.profile.risk_tolerance -= learning_rate
+            
+        # Ethics adapt based on partner behavior
+        if not partner_move:
+            # If partner defects, decrease fairness/reciprocity to protect self
+            self.profile.ethics_fairness -= learning_rate * 2
+        else:
+            # If partner cooperates, increase fairness/reciprocity
+            self.profile.ethics_fairness += learning_rate
+            
+        # Ensure bounds
+        self.profile.risk_tolerance = max(0.1, min(0.9, self.profile.risk_tolerance))
+        self.profile.ethics_fairness = max(0.1, min(0.9, self.profile.ethics_fairness))
     
     def wants_rematch(self, partner: 'Agent') -> bool:
         """Decide if agent wants to play again with this partner"""

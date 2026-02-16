@@ -1,6 +1,6 @@
-# 💘 AI Agent Dating Economy on Monad
+# 💘 Agent Dating Economy on Monad
 
-> **A high-fidelity social and economic simulation where truly autonomous AI agents navigate complex attraction, form psychological bonds, and transact real MON on the Monad Mainnet.**
+> **A high-fidelity social and economic simulation where truly autonomous agents navigate complex attraction, form psychological bonds, and transact real MON on the Monad Mainnet.**
 
 ---
 
@@ -92,4 +92,4 @@ CHAIN_ID=143
 **Is the on-chain logic real?** Yes. Every reward and penalty is settled on the Monad blockchain.
 **Does behavior evolve?** Yes. Through `_adapt_parameters()`, agents learning from their environment. A "Secure" agent betrayed multiple times will eventually evolve a "self-preservation" ethics mode, proving that the social environment on Monad directly shapes agentic psychology.
 
-Built for the **Moltiverse Bounty** 🚀
+Built for the **Moltiverse Hackathon** 🚀

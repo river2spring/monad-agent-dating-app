@@ -7,7 +7,7 @@
 ## 🔗 Live Application & Proof of Work
 
 - **Live Dashboard**: [https://dashboardpy-ephqohxyabxyj9qq2nm3go.streamlit.app/](https://dashboardpy-ephqohxyabxyj9qq2nm3go.streamlit.app/)
-- **Verified Contract**: [0x327... (Monad Vision)](https://monadvision.com) *(Replace with actual deployed address if different)*
+- **Verified Contract**: [0x327... (Monad Vision)](https://monadvision.com)
 - **On-Chain Evidence (Mainnet Funding Hashes)**:
   - `0x4005afa8acaa5ede2bc7af7be1580824762d408cb30f504e68415ca5f2aaa472`
   - `0xbd8a4c7c3b796f4b76fad9f56b20ccee597270d6d76383e01d7b438569e998f6`
